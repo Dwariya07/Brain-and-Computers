@@ -1802,19 +1802,21 @@
   </div>
 
   <script>
-    const views = {
-      home: document.getElementById("view-home"),
-      author: document.getElementById("view-author"),
-      context: document.getElementById("view-context"),
-      rhetoric: document.getElementById("view-rhetoric"),
-      core: document.getElementById("view-core"),
-      concepts: document.getElementById("view-concepts"),
-      bio: document.getElementById("view-bio"),
-      themes: document.getElementById("view-themes"),
-      takeaways: document.getElementById("view-takeaways"),
-      implications: document.getElementById("view-implications"),
-      "concept-flow": document.getElementById("view-concept-flow"),
-    };
+  const views = {
+  home: document.getElementById("view-home"),
+  author: document.getElementById("view-author"),
+  context: document.getElementById("view-context"),
+  rhetoric: document.getElementById("view-rhetoric"),
+  core: document.getElementById("view-core"),
+  concepts: document.getElementById("view-concepts"),
+  bio: document.getElementById("view-bio"),
+  themes: document.getElementById("view-themes"),
+  takeaways: document.getElementById("view-takeaways"),
+  implications: document.getElementById("view-implications"),
+  quiz: document.getElementById("view-quiz"),          // ← add this line
+  "concept-flow": document.getElementById("view-concept-flow"),
+};
+
 
     function showView(name) {
       Object.keys(views).forEach((key) => {
