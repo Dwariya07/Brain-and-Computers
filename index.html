@@ -316,24 +316,6 @@
       color: var(--text-muted);
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 2px 8px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--border);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--accent-neutral);
-    }
-
     .ladder {
       display: flex;
       flex-direction: column;
@@ -1098,7 +1080,7 @@
           <div class="view-kicker">Overview</div>
           <h1 class="view-title">Intellectual Map of the Essay</h1>
           <p class="view-intro">
-            Explore the essay through nine lenses: author, context, strategy, argument, concepts, theme, takeaways, implications, and an interactive quiz.
+            Explore the essay through ten lenses: author, context, strategy, argument, concepts, biology, theme, takeaways, implications, and an interactive quiz.
           </p>
           <div class="map-grid">
             <article class="map-card" data-view-target="author">
@@ -1131,26 +1113,32 @@
               <p class="map-desc">AND, OR, ALMOST, learning loops, plasticity, connectivity.</p>
               <div class="map-meta">Concept toolkit</div>
             </article>
+            <article class="map-card" data-view-target="bio">
+              <div class="map-index">06 · Biology</div>
+              <div class="map-title">Biological Foundations</div>
+              <p class="map-desc">Neurons, neuroplasticity, and cortex anatomy behind ALMOST logic.</p>
+              <div class="map-meta">Brain science link</div>
+            </article>
             <article class="map-card" data-view-target="themes">
-              <div class="map-index">06 · Theme</div>
+              <div class="map-index">07 · Theme</div>
               <div class="map-title">Themes &amp; Ideas</div>
               <p class="map-desc">Intelligence as adaptability and speed under uncertainty.</p>
               <div class="map-meta">Theme ≠ topic</div>
             </article>
             <article class="map-card" data-view-target="takeaways">
-              <div class="map-index">07 · Takeaways</div>
+              <div class="map-index">08 · Takeaways</div>
               <div class="map-title">Exam-Ready Insights</div>
               <p class="map-desc">Seven sharp claims you can defend in essays and exams.</p>
               <div class="map-meta">Revision focus</div>
             </article>
             <article class="map-card" data-view-target="implications">
-              <div class="map-index">08 · Implications</div>
+              <div class="map-index">09 · Implications</div>
               <div class="map-title">Beyond the Essay</div>
               <p class="map-desc">Human intelligence, AI design, and evolution’s trade-offs.</p>
               <div class="map-meta">So what?</div>
             </article>
             <article class="map-card" data-view-target="quiz">
-              <div class="map-index">09 · Assessment</div>
+              <div class="map-index">10 · Assessment</div>
               <div class="map-title">Quiz &amp; Misconceptions</div>
               <p class="map-desc">Test your understanding of logic, learning, and ALMOST.</p>
               <div class="map-meta">Self-check</div>
@@ -1448,11 +1436,103 @@
         </div>
       </section>
 
+      <!-- BIOLOGICAL FOUNDATIONS -->
+      <section class="view" id="view-bio">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>Biology · Human Brain</span>
+          </div>
+          <h2 class="view-title">Biological Foundations of the Human Brain</h2>
+          <p class="view-intro">
+            Jastrow writes about logic gates and ALMOST decisions, but the machine he cares about is biological. This section connects the physical facts about neurons, neuroplasticity, and the cerebral cortex to his claims about learning and intelligence.
+          </p>
+
+          <div class="connection-layout">
+            <div class="gate-simple">
+              <div class="card-meta" style="margin-bottom:4px;">Neuron numbers</div>
+              <p class="small">
+                The human brain contains roughly 86&nbsp;billion neurons, each forming thousands of synapses with other neurons. This creates an extraordinarily dense, interconnected network capable of complex information processing.
+              </p>
+              <p class="small" style="margin-top:8px;">
+                Jastrow’s point about a single human “gate” receiving up to 100,000 inputs is a simplified way of expressing this connectivity: each neuron sits at the intersection of many incoming signals, not just two or three.
+              </p>
+            </div>
+            <div class="gate-brain">
+              <div class="card-meta" style="margin-bottom:4px;">Interactive neuron fan‑in</div>
+              <div class="brain-diagram" id="bioBrainDiagram">
+                <div class="brain-gate"></div>
+                <div class="brain-out" id="bioBrainOut"></div>
+              </div>
+              <div class="almost-controls">
+                <div>Active synapses: <span id="bioSynCount"></span></div>
+                <input type="range" id="bioSynSlider" min="0" max="100" value="30" />
+                <div class="small">
+                  Slide to see how many synapses are active. The neuron “fires” once activity passes a threshold—an illustration of ALMOST logic grounded in real connectivity.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="loop-wrap" style="margin-top:24px;">
+            <div>
+              <div class="card-meta" style="margin-bottom:4px;">Neuroplasticity and the learning loop</div>
+              <div class="card">
+                <div class="card-body small">
+                  Neuroplasticity is the brain’s ability to reorganize its structure and function in response to experience, learning, and environmental change. Over time, synapses strengthen, weaken, appear, or disappear, reshaping the network.
+                  <br><br>
+                  This is the biological substrate of Jastrow’s learning loop: when the brain tries, compares, adjusts, and stores, the “adjust” and “store” steps are literally changes in synaptic strength and wiring.
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <div class="card-title">Click to link biology and logic</div>
+                <div class="card-meta">Choose which layer of the brain you want to relate to his argument</div>
+                <div class="topic-theme">
+                  <div class="topic-list" id="bioLinksTopics">
+                    <div class="topic-item active" data-bio="neuron">Single neuron</div>
+                    <div class="topic-item" data-bio="plasticity">Neuroplasticity</div>
+                    <div class="topic-item" data-bio="cortex">Cerebral cortex</div>
+                  </div>
+                  <div class="theme-list">
+                    <div class="card-meta" style="margin-bottom:6px;">How it supports Jastrow’s ideas</div>
+                    <div class="theme-text" id="bioLinksDetail">
+                      At the level of a single neuron, thousands of synapses converge on one cell. Jastrow’s image of 50,000 inputs but only 10,000–15,000 needed to fire is a conceptual model of how a neuron can implement ALMOST logic.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="implications-grid" style="margin-top:28px;">
+            <div class="imp-card">
+              <div class="imp-title">Cerebral cortex architecture</div>
+              <div class="imp-body">
+                The human cerebral cortex contains roughly 16&nbsp;billion neurons arranged in layered, highly interconnected networks. These networks support abstract thinking, planning, language, and long‑term learning.
+              </div>
+            </div>
+            <div class="imp-card">
+              <div class="imp-title">ALMOST logic at scale</div>
+              <div class="imp-body">
+                When millions of cortical neurons use ALMOST‑style thresholds, the system can integrate vast amounts of partial evidence and still reach timely decisions. This is the biological reason Jastrow can treat imprecise, fast thinking as an evolutionary advantage.
+              </div>
+            </div>
+            <div class="imp-card">
+              <div class="imp-title">Why humans are “special”</div>
+              <div class="imp-body">
+                A large, plastic cortex packed with neurons provides many blank circuits at birth. Experience wires these circuits into specialized programs, making human intelligence emerge from structure plus learning rather than from hard‑coded reflexes.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- THEMES -->
       <section class="view" id="view-themes">
         <div class="view-inner">
           <div class="pill-label">
-            <span class="pill-dot"></span><span>06 · Theme</span>
+            <span class="pill-dot"></span><span>07 · Theme</span>
           </div>
           <h2 class="view-title">Themes: Beyond Brains and Circuits</h2>
           <p class="view-intro">
@@ -1479,7 +1559,7 @@
       <section class="view" id="view-takeaways">
         <div class="view-inner">
           <div class="pill-label">
-            <span class="pill-dot"></span><span>07 · Takeaways</span>
+            <span class="pill-dot"></span><span>08 · Takeaways</span>
           </div>
           <h2 class="view-title">Exam-Ready Takeaways</h2>
           <p class="view-intro">
@@ -1557,7 +1637,7 @@
       <section class="view" id="view-implications">
         <div class="view-inner">
           <div class="pill-label">
-            <span class="pill-dot"></span><span>08 · Implications</span>
+            <span class="pill-dot"></span><span>09 · Implications</span>
           </div>
           <h2 class="view-title">What Follows from the Argument</h2>
           <p class="view-intro">
@@ -1598,7 +1678,7 @@
       <section class="view" id="view-quiz">
         <div class="view-inner">
           <div class="pill-label">
-            <span class="pill-dot"></span><span>09 · Assessment</span>
+            <span class="pill-dot"></span><span>10 · Assessment</span>
           </div>
           <h2 class="view-title">Quiz, Reasoning, and Misconceptions</h2>
           <p class="view-intro">
@@ -1685,6 +1765,7 @@
       rhetoric: document.getElementById("view-rhetoric"),
       core: document.getElementById("view-core"),
       concepts: document.getElementById("view-concepts"),
+      bio: document.getElementById("view-bio"),
       themes: document.getElementById("view-themes"),
       takeaways: document.getElementById("view-takeaways"),
       implications: document.getElementById("view-implications"),
@@ -1855,143 +1936,171 @@
       });
     });
 
-    showLoopStep(0);
+        showLoopStep(0);
     startLoopTimer();
 
-    const simpleOut = document.getElementById("simpleOut");
-    simpleOut.style.background = "#d1d5db";
-
-    const brainDiagram = document.getElementById("brainDiagram");
-    const brainOut = document.getElementById("brainOut");
-    const almostExample = document.getElementById("almostExample");
-    const almostBtn = document.getElementById("almostBtn");
-
-    const TOTAL_LINES = 30;
-    for (let i = 0; i < TOTAL_LINES; i++) {
-      const line = document.createElement("div");
-      line.className = "brain-line";
-      const y = 10 + Math.random() * 80;
-      const angle = Math.random() * 40 - 20;
-      line.style.top = y + "px";
-      line.style.left = "0";
-      line.style.transform = `rotate(${angle}deg)`;
-      brainDiagram.appendChild(line);
-    }
-    const brainLines = Array.from(
-      brainDiagram.querySelectorAll(".brain-line")
-    );
-
-    const examples = [
-      { text: "About 15,000 of 50,000 inputs is enough for the gate to fire.", threshold: 0.3 },
-      { text: "Even 10,000 of 50,000 inputs may be enough in some situations.", threshold: 0.2 },
-      { text: "A higher bar: roughly 25,000 of 50,000 inputs push the gate to act.", threshold: 0.5 },
-    ];
-    let almostState = 0;
-
-    function applyExample() {
-      const ex = examples[almostState];
-      almostExample.textContent = ex.text;
-      const limit = Math.floor(TOTAL_LINES * ex.threshold);
-      brainLines.forEach((line, idx) => {
-        if (idx < limit) {
-          line.style.background = "rgba(22,163,74,0.9)";
-          line.style.opacity = 0.95;
-        } else {
-          line.style.background = "rgba(148,163,184,0.6)";
-          line.style.opacity = 0.4;
-        }
-      });
-      brainOut.style.background = "#16a34a";
-      brainOut.style.boxShadow = "0 0 12px rgba(22,163,74,0.6)";
-    }
-
-    almostBtn.addEventListener("click", () => {
-      almostState = (almostState + 1) % examples.length;
-      applyExample();
-    });
-    applyExample();
-
+    // Concepts topic list
     const conceptDetail = document.getElementById("conceptDetail");
     const conceptTexts = {
       andor:
         "AND and OR gates are the smallest logical units that let both computers and brains implement reasoning: combining conditions (“a and b”) or alternatives (“a or b”) to reach a conclusion “c.”",
       loop:
-        "The learning loop is a four-step process: the system tries an approach, compares the outcome with its goal, adjusts its method in light of errors, and stores successful strategies for future use.",
+        "The learning loop—try, compare, adjust, store—is Jastrow’s way of turning experience into a process. A system with this loop can change its responses based on past outcomes.",
       plasticity:
-        "Plasticity refers to the fact that many brain circuits start unwired and are connected by experience, allowing behavior to be shaped by life rather than fixed at birth.",
+        "Plasticity is the capacity of wiring to change. In the essay, it is what lets human brains move beyond fixed reflexes and build new strategies for survival.",
       connectivity:
-        "Connectivity is the number of inputs each neuron receives. Jastrow highlights that a human brain gate can have up to 100,000 incoming fibers, making each decision the result of many influences.",
+        "Connectivity refers to how many inputs each gate receives. In a human brain, a single neuron can receive tens of thousands of inputs, making each decision depend on many signals at once.",
       almost:
-        "ALMOST logic means a gate fires when enough inputs are active, not when every single one is. This makes human thought fast and flexible, at the cost of occasional errors.",
+        "ALMOST logic is a threshold rule: a brain gate fires when enough inputs are active, not necessarily all. This allows quick decisions on partial information.",
     };
 
-    document.querySelectorAll("#conceptTopics .topic-item").forEach((item) => {
-      item.addEventListener("click", () => {
-        document
-          .querySelectorAll("#conceptTopics .topic-item")
-          .forEach((t) => t.classList.remove("active"));
-        item.classList.add("active");
-        const key = item.getAttribute("data-concept");
-        conceptDetail.textContent = conceptTexts[key];
+    document
+      .querySelectorAll("#conceptTopics .topic-item")
+      .forEach((item) => {
+        item.addEventListener("click", () => {
+          document
+            .querySelectorAll("#conceptTopics .topic-item")
+            .forEach((t) => t.classList.remove("active"));
+          item.classList.add("active");
+          const key = item.getAttribute("data-concept");
+          conceptDetail.textContent = conceptTexts[key];
+        });
       });
-    });
 
+    // Biology neuron fan-in slider
+    const bioBrainDiagram = document.getElementById("bioBrainDiagram");
+    const bioBrainOut = document.getElementById("bioBrainOut");
+    const bioSynSlider = document.getElementById("bioSynSlider");
+    const bioSynCount = document.getElementById("bioSynCount");
+
+    if (bioBrainDiagram && bioSynSlider) {
+      const BIO_LINES = 30;
+      for (let i = 0; i < BIO_LINES; i++) {
+        const line = document.createElement("div");
+        line.className = "brain-line";
+        const y = 10 + Math.random() * 80;
+        const angle = Math.random() * 40 - 20;
+        line.style.top = y + "px";
+        line.style.left = "0";
+        line.style.transform = `rotate(${angle}deg)`;
+        bioBrainDiagram.appendChild(line);
+      }
+      const bioLines = Array.from(
+        bioBrainDiagram.querySelectorAll(".brain-line")
+      );
+
+      function updateBioLines() {
+        const value = parseInt(bioSynSlider.value, 10); // 0–100
+        bioSynCount.textContent = `${value}% of local synapses active`;
+        const threshold = 30;
+        const activeCount = Math.floor((value / 100) * BIO_LINES);
+        bioLines.forEach((line, idx) => {
+          if (idx < activeCount) {
+            line.style.background = "rgba(22,163,74,0.9)";
+            line.style.opacity = 0.95;
+          } else {
+            line.style.background = "rgba(148,163,184,0.6)";
+            line.style.opacity = 0.4;
+          }
+        });
+        if (value >= threshold) {
+          bioBrainOut.style.background = "#16a34a";
+          bioBrainOut.style.boxShadow = "0 0 12px rgba(22,163,74,0.6)";
+        } else {
+          bioBrainOut.style.background = "#d1d5db";
+          bioBrainOut.style.boxShadow = "none";
+        }
+      }
+
+      bioSynSlider.addEventListener("input", updateBioLines);
+      updateBioLines();
+    }
+
+    // Biology ↔ Jastrow links
+    const bioLinksDetail = document.getElementById("bioLinksDetail");
+    const bioLinksTexts = {
+      neuron:
+        "At the level of a single neuron, thousands of synapses converge on one cell. Jastrow’s image of 50,000 inputs but only 10,000–15,000 needed to fire is a conceptual model of how a neuron can implement ALMOST logic.",
+      plasticity:
+        "Neuroplasticity provides the physical basis for his learning loop. When the brain tries, compares, adjusts, and stores, the changes are adjustments in synaptic strength and wiring patterns.",
+      cortex:
+        "The human cerebral cortex, with about 16 billion neurons, is where long-term learning and abstract reasoning are concentrated. Its dense, plastic networks allow many ALMOST-style decisions to interact, producing the rich intelligence he describes.",
+    };
+
+    document
+      .querySelectorAll("#bioLinksTopics .topic-item")
+      .forEach((item) => {
+        item.addEventListener("click", () => {
+          document
+            .querySelectorAll("#bioLinksTopics .topic-item")
+            .forEach((t) => t.classList.remove("active"));
+          item.classList.add("active");
+          const key = item.getAttribute("data-bio");
+          bioLinksDetail.textContent = bioLinksTexts[key];
+        });
+      });
+
+    // Theme topics
     const themeDetail = document.getElementById("themeDetail");
     const themeTexts = {
       intelligence:
         "Intelligence, in this essay, is not a mystical spark but the behavior of a system with enough memory, flexible wiring, and feedback to learn from experience.",
       adaptability:
-        "A central theme is that adaptability matters more than perfection: a brain that can act on partial information outperforms one that waits for complete certainty.",
+        "Jastrow suggests that being adaptable—able to act quickly on partial information—is often more valuable than being perfectly accurate but slow.",
       evolution:
-        "Jastrow frames thinking as an evolutionary trade-off: organisms with fast, good-enough decision systems survive and reproduce; those that demand exactness may not act in time.",
+        "Evolution favors organisms whose brains make fast, reasonable bets rather than waiting for certainty. ALMOST logic is one way biology implements those bets.",
     };
 
-    document.querySelectorAll("#topicThemes .topic-item").forEach((item) => {
-      item.addEventListener("click", () => {
-        document
-          .querySelectorAll("#topicThemes .topic-item")
-          .forEach((t) => t.classList.remove("active"));
-        item.classList.add("active");
-        const key = item.getAttribute("data-theme");
-        themeDetail.textContent = themeTexts[key];
+    document
+      .querySelectorAll("#topicThemes .topic-item")
+      .forEach((item) => {
+        item.addEventListener("click", () => {
+          document
+            .querySelectorAll("#topicThemes .topic-item")
+            .forEach((t) => t.classList.remove("active"));
+          item.classList.add("active");
+          const key = item.getAttribute("data-theme");
+          themeDetail.textContent = themeTexts[key];
+        });
       });
-    });
 
+    // Takeaway cards
     document.querySelectorAll("#takeawaysList .takeaway-card").forEach((card) => {
       card.addEventListener("click", () => {
         card.classList.toggle("show-annotation");
       });
     });
 
+    // Quiz
     document.querySelectorAll("#quizList .quiz-item").forEach((item) => {
       const correctIndex = parseInt(item.getAttribute("data-correct"), 10);
       const options = item.querySelectorAll(".quiz-options li");
       const feedback = item.querySelector(".quiz-feedback");
       options.forEach((opt) => {
         opt.addEventListener("click", () => {
-          options.forEach((o) => {
-            o.classList.remove("correct", "incorrect");
-          });
+          options.forEach((o) => o.classList.remove("correct", "incorrect"));
           const idx = parseInt(opt.getAttribute("data-index"), 10);
           if (idx === correctIndex) {
             opt.classList.add("correct");
-            feedback.textContent = "Correct: this matches Jastrow’s example in the essay.";
+            feedback.textContent = "Correct: this matches Jastrow’s explanation.";
           } else {
             opt.classList.add("incorrect");
-            feedback.textContent = "Not quite—compare this option with the specific examples he uses.";
+            feedback.textContent =
+              "Not quite. Think about how Jastrow defines that concept in the essay.";
           }
         });
       });
     });
 
+    // Misconceptions
     const misconDetail = document.getElementById("misconDetail");
     const misconTexts = {
       same:
-        "Jastrow explicitly rejects the idea that brains are “just computers.” They share logical steps, but brains differ in plastic wiring, massive connectivity, and ALMOST logic, which make their behavior richer and more adaptive.",
+        "Jastrow insists brains are not just wet computers: they share logic, but brains are massively more connected, plastic, and use ALMOST rather than strict logic.",
       accuracy:
-        "He argues that a brain waiting for perfect accuracy would be too slow to survive. Evolution favors systems that act quickly on partial evidence, even at the cost of some mistakes.",
+        "He argues that a brain waiting for perfect accuracy would rarely act and would lose in evolution. Speed on partial information can be more adaptive.",
       program:
-        "While computers depend on external programmers to load new programs, a learning brain rewires its own circuits in response to experience. In that sense, the “program” emerges from the organism’s history, not from an outside designer.",
+        "In a learning brain, the ‘program’ is not fixed from outside; experience rewires connections from within, which is what makes human intelligence open‑ended.",
     };
 
     document.querySelectorAll("#misconList .miscon-item").forEach((item) => {
@@ -2002,50 +2111,23 @@
     });
 
     // Fullscreen toggle
-    const fsButton = document.getElementById("fsToggle");
-    const shell = document.querySelector(".shell");
-
-    function isFullscreen() {
-      return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    const fsBtn = document.getElementById("fsToggle");
+    if (fsBtn) {
+      fsBtn.addEventListener("click", async () => {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+          fsBtn.classList.add("fs-active");
+        } else {
+          await document.exitFullscreen();
+          fsBtn.classList.remove("fs-active");
+        }
+      });
     }
 
-    function enterFullscreen() {
-      if (shell.requestFullscreen) {
-        shell.requestFullscreen();
-      } else if (shell.webkitRequestFullscreen) {
-        shell.webkitRequestFullscreen();
-      } else if (shell.msRequestFullscreen) {
-        shell.msRequestFullscreen();
-      }
-    }
-
-    function exitFullscreen() {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-    }
-
-    fsButton.addEventListener("click", () => {
-      if (!isFullscreen()) {
-        enterFullscreen();
-      } else {
-        exitFullscreen();
-      }
-    });
-
-    document.addEventListener("fullscreenchange", () => {
-      if (isFullscreen()) {
-        fsButton.classList.add("fs-active");
-        fsButton.textContent = "⤡";
-      } else {
-        fsButton.classList.remove("fs-active");
-        fsButton.textContent = "⤢";
-      }
-    });
+    // Start on home view
+    showView("home");
   </script>
 </body>
 </html>
+
+
