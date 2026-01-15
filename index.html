@@ -1758,6 +1758,7 @@
   </div>
 
   <script>
+    
     const views = {
       home: document.getElementById("view-home"),
       author: document.getElementById("view-author"),
@@ -2016,6 +2017,84 @@
       updateBioLines();
     }
 
+ // Brain gate & ALMOST logic (random active lines each click)
+const brainDiagram = document.getElementById("brainDiagram");
+const brainOut = document.getElementById("brainOut");
+const almostBtn = document.getElementById("almostBtn");
+const almostExample = document.getElementById("almostExample");
+
+if (brainDiagram && almostBtn && almostExample && brainOut) {
+  const LINES = 24;
+
+  // draw input lines once
+  for (let i = 0; i < LINES; i++) {
+    const line = document.createElement("div");
+    line.className = "brain-line";
+    const y = 10 + Math.random() * 80;
+    const angle = Math.random() * 40 - 20;
+    line.style.top = y + "px";
+    line.style.left = "0";
+    line.style.transform = `rotate(${angle}deg)`;
+    brainDiagram.appendChild(line);
+  }
+
+  const brainLines = Array.from(brainDiagram.querySelectorAll(".brain-line"));
+
+  const examples = [
+    "Out of 50,000 inputs, about 10,000 are enough to trigger a response.",
+    "The brain does not wait for every input; it moves when enough evidence is present.",
+    "This ALMOST rule trades perfect accuracy for speed, which helps survival."
+  ];
+  let exIndex = 0;
+
+  function highlightRandomLines() {
+    // pick a random threshold between 30% and 70% of inputs
+    const minFrac = 0.3;
+    const maxFrac = 0.7;
+    const frac = minFrac + Math.random() * (maxFrac - minFrac);
+    const activeCount = Math.max(1, Math.floor(frac * brainLines.length));
+
+    // randomly choose which indices are active
+    const indices = [...brainLines.keys()];
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    const activeSet = new Set(indices.slice(0, activeCount));
+
+    brainLines.forEach((line, idx) => {
+      if (activeSet.has(idx)) {
+        line.style.background = "rgba(22,163,74,0.9)";
+        line.style.opacity = 0.95;
+      } else {
+        line.style.background = "rgba(148,163,184,0.6)";
+        line.style.opacity = 0.4;
+      }
+    });
+
+    // output fires whenever at least the minimum fraction is active
+    brainOut.style.background = "#16a34a";
+    brainOut.style.boxShadow = "0 0 12px rgba(22,163,74,0.6)";
+  }
+
+  function updateExample() {
+    almostExample.textContent = examples[exIndex];
+    exIndex = (exIndex + 1) % examples.length;
+  }
+
+  almostBtn.addEventListener("click", () => {
+    highlightRandomLines();  // new random pattern
+    updateExample();         // next explanation sentence
+  });
+
+  // initial state
+  highlightRandomLines();
+  updateExample();
+}
+
+
+
+
     // Biology ↔ Jastrow links
     const bioLinksDetail = document.getElementById("bioLinksDetail");
     const bioLinksTexts = {
@@ -2129,5 +2208,4 @@
   </script>
 </body>
 </html>
-
 
