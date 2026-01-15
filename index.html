@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brains & Computers · Interactive Essay Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #f5f5f2;
+      --bg-elevated: #ffffff;
+      --border: #e5e7eb;
+      --border-strong: #cbd5e1;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --accent-computer: #2563eb;
+      --accent-brain: #16a34a;
+      --accent-neutral: #9ca3af;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 50px rgba(15,23,42,0.12);
+      --transition-fast: 0.18s ease-out;
+      --transition-med: 0.28s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      background: #f9fafb;
+    }
+
+    header {
+      flex: 0 0 72px;
+      padding: 16px 28px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(245,245,242,0.96);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .nav-link {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .nav-link:hover {
+      border-color: var(--border);
+      background: #e5e7eb;
+    }
+
+    .nav-link.primary {
+      border-color: var(--border-strong);
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .fs-btn {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-size: 13px;
+      cursor: pointer;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .fs-btn:hover {
+      background: #e5e7eb;
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .fs-btn.fs-active {
+      background: #111827;
+      color: #f9fafb;
+      border-color: #111827;
+    }
+
+    main {
+      flex: 1 1 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .view {
+      position: absolute;
+      inset: 0;
+      padding: 32px 32px 40px;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity var(--transition-med), transform var(--transition-med);
+    }
+
+    .view--active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .view-inner {
+      max-width: 900px;
+      margin: 0 auto 40px;
+    }
+
+    .view-title {
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+      margin-bottom: 4px;
+    }
+
+    .view-kicker {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .view-intro {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .pill-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.9);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-neutral);
+    }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 12px;
+    }
+
+    .map-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: box-shadow var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .map-card:hover {
+      box-shadow: 0 16px 45px rgba(15,23,42,0.12);
+      transform: translateY(-3px);
+      border-color: var(--border-strong);
+      background: #ffffff;
+    }
+
+    .map-index {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .map-title {
+      font-family: "Playfair Display", serif;
+      font-size: 18px;
+    }
+
+    .map-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .map-meta {
+      margin-top: auto;
+      font-size: 11px;
+      color: var(--accent-neutral);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: start;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 16px 18px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .card-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .card-body {
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent-neutral);
+    }
+
+    .ladder {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .ladder-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 13px;
+    }
+
+    .ladder-marker {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 2px solid var(--border-strong);
+      margin-top: 2px;
+    }
+
+    .ladder-label {
+      font-weight: 500;
+    }
+
+    .ladder-text {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .context-line {
+      position: relative;
+      margin-top: 18px;
+      padding-top: 40px;
+      padding-bottom: 8px;
+    }
+
+    .context-axis {
+      position: absolute;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .context-nodes {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .context-node {
+      position: relative;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .context-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 2px solid var(--border-strong);
+      background: #f9fafb;
+      margin: 0 auto 6px;
+      transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .context-node.active .context-dot {
+      background: #ffffff;
+      border-color: var(--accent-computer);
+      transform: scale(1.1);
+    }
+
+    .context-year {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .context-caption {
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--text-main);
+      min-height: 52px;
+    }
+
+    .compare-panels {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 12px;
+    }
+
+    .compare-panel {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 14px 16px;
+    }
+
+    .compare-panel h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .compare-panel ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .compare-panel li + li {
+      margin-top: 4px;
+    }
+
+    .compare-panel.computer h3 {
+      color: var(--accent-computer);
+    }
+
+    .compare-panel.brain h3 {
+      color: var(--accent-brain);
+    }
+
+    .strip-list {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .strip {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 8px 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .strip:hover {
+      border-color: var(--border-strong);
+      background: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .strip-label {
+      font-weight: 500;
+    }
+
+    .strip-mode {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .strip-detail {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      min-height: 40px;
+    }
+
+    .logic-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 24px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .logic-demo {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 14px 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .logic-inputs {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .logic-mode-btn {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .logic-mode-btn:hover {
+      background: #e5e7eb;
+      border-color: var(--border-strong);
+    }
+
+    .logic-visual {
+      position: relative;
+      height: 140px;
+    }
+
+    .logic-wire {
+      position: absolute;
+      height: 2px;
+      background: #d1d5db;
+      transition: background var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .logic-wire.in-a {
+      top: 40px;
+      left: 0;
+      right: 58%;
+    }
+
+    .logic-wire.in-b {
+      top: 80px;
+      left: 0;
+      right: 58%;
+    }
+
+    .logic-gate {
+      position: absolute;
+      top: 34px;
+      left: 40%;
+      width: 80px;
+      height: 52px;
+      border-radius: 26px;
+      border: 2px solid var(--text-main);
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .logic-wire.out {
+      top: 60px;
+      left: calc(40% + 80px);
+      right: 0;
+    }
+
+    .logic-output-label {
+      position: absolute;
+      bottom: 6px;
+      right: 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .logic-explain {
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .logic-tabs {
+      display: inline-flex;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .logic-tab {
+      padding: 6px 12px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+    }
+
+    .logic-tab:last-child {
+      border-right: none;
+    }
+
+    .logic-tab.active {
+      background: #e5edff;
+      color: #1d4ed8;
+      font-weight: 500;
+    }
+
+    .logic-scenario {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      min-height: 54px;
+    }
+
+    .loop-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 24px;
+      margin-top: 20px;
+      align-items: center;
+    }
+
+    .loop-diagram {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 1px dashed var(--border-strong);
+      margin: 0 auto;
+    }
+
+    .loop-node {
+      position: absolute;
+      width: 96px;
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      text-align: center;
+      padding: 0 10px;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .loop-node[data-step="TRY"] {
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .loop-node[data-step="COMPARE"] {
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .loop-node[data-step="ADJUST"] {
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .loop-node[data-step="STORE"] {
+      left: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .loop-node.active {
+      border-color: var(--accent-computer);
+      box-shadow: 0 0 18px rgba(37,99,235,0.4);
+      background: #e5edff;
+      transform: scale(1.02);
+    }
+
+    .loop-caption {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--text-main);
+      min-height: 44px;
+    }
+
+    .connection-layout {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 18px;
+    }
+
+    .gate-simple, .gate-brain {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 14px 16px;
+    }
+
+    .simple-diagram {
+      position: relative;
+      height: 120px;
+    }
+
+    .simple-wire {
+      position: absolute;
+      height: 2px;
+      background: #d1d5db;
+    }
+
+    .simple-wire.w1 { top: 30px; left: 0; right: 55%; }
+    .simple-wire.w2 { top: 45px; left: 0; right: 55%; }
+    .simple-wire.w3 { top: 60px; left: 0; right: 55%; }
+    .simple-wire.w4 { top: 75px; left: 0; right: 55%; }
+
+    .simple-gate {
+      position: absolute;
+      top: 36px;
+      left: 40%;
+      width: 70px;
+      height: 46px;
+      border-radius: 23px;
+      border: 2px solid var(--text-main);
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .simple-wire.out {
+      top: 58px;
+      left: calc(40% + 70px);
+      right: 0;
+    }
+
+    .brain-diagram {
+      position: relative;
+      height: 140px;
+    }
+
+    .brain-line {
+      position: absolute;
+      width: 52%;
+      height: 2px;
+      background: rgba(148,163,184,0.6);
+      transform-origin: left center;
+      opacity: 0.45;
+      transition: background var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .brain-gate {
+      position: absolute;
+      top: 35%;
+      left: 46%;
+      width: 60px;
+      height: 60px;
+      border-radius: 999px;
+      border: 2px solid var(--accent-brain);
+      background: #f0fdf4;
+    }
+
+    .brain-out {
+      position: absolute;
+      top: 50%;
+      left: calc(46% + 60px);
+      right: 0;
+      height: 2px;
+      background: #d1d5db;
+      transition: background var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .almost-controls {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .almost-btn {
+      align-self: flex-start;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .almost-btn:hover {
+      background: #e5e7eb;
+      border-color: var(--border-strong);
+    }
+
+    .topic-theme {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .topic-list, .theme-list {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 14px 16px;
+    }
+
+    .topic-item {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .topic-item:last-child {
+      border-bottom: none;
+    }
+
+    .topic-item.active {
+      color: var(--accent-computer);
+      font-weight: 500;
+    }
+
+    .theme-text {
+      font-size: 14px;
+      color: var(--text-main);
+      min-height: 70px;
+    }
+
+    .takeaways {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .takeaway-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 10px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .takeaway-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba(15,23,42,0.12);
+      border-color: var(--border-strong);
+    }
+
+    .takeaway-index {
+      font-size: 11px;
+      color: var(--accent-neutral);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 3px;
+    }
+
+    .takeaway-text {
+      color: var(--text-main);
+    }
+
+    .takeaway-annotation {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    .takeaway-card.show-annotation .takeaway-annotation {
+      display: block;
+    }
+
+    .implications-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .imp-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+
+    .imp-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .imp-body {
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .closing-block {
+      margin-top: 32px;
+      padding: 26px 24px 30px;
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-strong);
+      background: #f9fafb;
+      text-align: center;
+    }
+
+    .closing-block h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .closing-block p {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .closing-block em {
+      font-family: "Playfair Display", serif;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .quiz-list {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quiz-item {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+
+    .quiz-question {
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .quiz-options {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 8px;
+    }
+
+    .quiz-options li {
+      padding: 4px 0;
+      cursor: pointer;
+      border-radius: 6px;
+      padding-left: 4px;
+      transition: background var(--transition-fast);
+    }
+
+    .quiz-options li:hover {
+      background: #eef2ff;
+    }
+
+    .quiz-feedback {
+      font-size: 13px;
+      color: var(--text-muted);
+      min-height: 18px;
+    }
+
+    .quiz-options li.correct {
+      background: #dcfce7;
+    }
+
+    .quiz-options li.incorrect {
+      background: #fee2e2;
+    }
+
+    .misconceptions {
+      margin-top: 24px;
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-strong);
+      background: #f9fafb;
+      padding: 14px 16px;
+      font-size: 13px;
+    }
+
+    .miscon-list {
+      margin-top: 8px;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .miscon-item {
+      cursor: pointer;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .miscon-item:last-child {
+      border-bottom: none;
+    }
+
+    .miscon-detail {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      min-height: 40px;
+    }
+
+    @media (max-width: 900px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        height: auto;
+      }
+      main {
+        height: calc(100vh - 90px);
+      }
+      .view {
+        padding: 20px 18px 24px;
+      }
+      .map-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .split,
+      .logic-layout,
+      .loop-wrap,
+      .connection-layout,
+      .topic-theme,
+      .implications-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .implications-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .map-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="brand-title">Brains &amp; Computers</div>
+        <div class="brand-sub">An Interactive Reading of Robert Jastrow</div>
+      </div>
+      <div class="header-nav">
+        <div class="nav-link primary" data-nav="home">Intellectual Map</div>
+        <div class="nav-link" data-nav="concept-flow">Argument Flow</div>
+        <button class="fs-btn" id="fsToggle" type="button" aria-label="Toggle fullscreen">⤢</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- HOME -->
+      <section class="view view--active" id="view-home">
+        <div class="view-inner">
+          <div class="view-kicker">Overview</div>
+          <h1 class="view-title">Intellectual Map of the Essay</h1>
+          <p class="view-intro">
+            Explore the essay through nine lenses: author, context, strategy, argument, concepts, theme, takeaways, implications, and an interactive quiz.
+          </p>
+          <div class="map-grid">
+            <article class="map-card" data-view-target="author">
+              <div class="map-index">01 · Author</div>
+              <div class="map-title">Author &amp; Authority</div>
+              <p class="map-desc">Why an astrophysicist is qualified to speak about brains and computers.</p>
+              <div class="map-meta">Ethos · Credibility</div>
+            </article>
+            <article class="map-card" data-view-target="context">
+              <div class="map-index">02 · Context</div>
+              <div class="map-title">Historical Setting</div>
+              <p class="map-desc">Cold War computing, space science, and the rise of cognitive science.</p>
+              <div class="map-meta">Intellectual backdrop</div>
+            </article>
+            <article class="map-card" data-view-target="rhetoric">
+              <div class="map-index">03 · Strategy</div>
+              <div class="map-title">Rhetorical Design</div>
+              <p class="map-desc">How comparison and contrast drive Jastrow’s persuasion.</p>
+              <div class="map-meta">Compare · Contrast</div>
+            </article>
+            <article class="map-card" data-view-target="core">
+              <div class="map-index">04 · Argument</div>
+              <div class="map-title">Brains vs Computers</div>
+              <p class="map-desc">The central claim: shared logic, different wiring and behavior.</p>
+              <div class="map-meta">Logic · Reasoning</div>
+            </article>
+            <article class="map-card" data-view-target="concepts">
+              <div class="map-index">05 · Concepts</div>
+              <div class="map-title">Key Concepts</div>
+              <p class="map-desc">AND, OR, ALMOST, learning loops, plasticity, connectivity.</p>
+              <div class="map-meta">Concept toolkit</div>
+            </article>
+            <article class="map-card" data-view-target="themes">
+              <div class="map-index">06 · Theme</div>
+              <div class="map-title">Themes &amp; Ideas</div>
+              <p class="map-desc">Intelligence as adaptability and speed under uncertainty.</p>
+              <div class="map-meta">Theme ≠ topic</div>
+            </article>
+            <article class="map-card" data-view-target="takeaways">
+              <div class="map-index">07 · Takeaways</div>
+              <div class="map-title">Exam-Ready Insights</div>
+              <p class="map-desc">Seven sharp claims you can defend in essays and exams.</p>
+              <div class="map-meta">Revision focus</div>
+            </article>
+            <article class="map-card" data-view-target="implications">
+              <div class="map-index">08 · Implications</div>
+              <div class="map-title">Beyond the Essay</div>
+              <p class="map-desc">Human intelligence, AI design, and evolution’s trade-offs.</p>
+              <div class="map-meta">So what?</div>
+            </article>
+            <article class="map-card" data-view-target="quiz">
+              <div class="map-index">09 · Assessment</div>
+              <div class="map-title">Quiz &amp; Misconceptions</div>
+              <p class="map-desc">Test your understanding of logic, learning, and ALMOST.</p>
+              <div class="map-meta">Self-check</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUTHOR -->
+      <section class="view" id="view-author">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>01 · Author</span>
+          </div>
+          <h2 class="view-title">Robert Jastrow: Why His Voice Matters</h2>
+          <p class="view-intro">
+            This essay is not written by a neuroscientist but by a physicist and space scientist. Understanding his background explains why he talks about brains in the language of circuits, gates, and programs.
+          </p>
+          <div class="split">
+            <div class="card">
+              <div class="card-title">From Space Science to Thinking Systems</div>
+              <div class="card-meta">Short, relevant biography</div>
+              <div class="card-body">
+                <p class="small">
+                  Jastrow worked on space research, nuclear physics, and atmospheric science, spending his career around sophisticated instruments and early computers. For him, a brain is another complex system whose behavior can be understood through structure and rules rather than mystery.
+                </p>
+                <p class="small" style="margin-top:8px;">
+                  His popular science writing trained him to explain technical ideas—like logical gates and plastic circuits—to readers who have never built a computer or studied neuroscience.
+                </p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Authority Ladder</div>
+              <div class="card-meta">Why he is credible on this topic</div>
+              <div class="ladder">
+                <div class="ladder-item">
+                  <div class="ladder-marker"></div>
+                  <div>
+                    <div class="ladder-label">Space &amp; nuclear research</div>
+                    <div class="ladder-text">Working with rockets, satellites, and weapons systems meant relying on complex electronics and early digital computation.</div>
+                  </div>
+                </div>
+                <div class="ladder-item">
+                  <div class="ladder-marker"></div>
+                  <div>
+                    <div class="ladder-label">Experience with computers</div>
+                    <div class="ladder-text">Designing and interpreting experiments required computers that used the very gates he describes, giving him an engineer’s view of “thinking machines.”</div>
+                  </div>
+                </div>
+                <div class="ladder-item">
+                  <div class="ladder-marker"></div>
+                  <div>
+                    <div class="ladder-label">Interpreter of science</div>
+                    <div class="ladder-text">As an explainer of astronomy and physics, he regularly translated abstract models into metaphors—exactly what he does when he compares brains to computers.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTEXT -->
+      <section class="view" id="view-context">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>02 · Context</span>
+          </div>
+          <h2 class="view-title">When and Where This Essay Lives</h2>
+          <p class="view-intro">
+            The Enchanted Loom was published in 1981, at a moment when digital computers, space exploration, and cognitive science were redefining what “thinking” could mean for both machines and humans.
+          </p>
+          <div class="card">
+            <div class="card-title">Timeline of Ideas</div>
+            <div class="card-meta">Click points to see the backdrop</div>
+            <div class="context-line">
+              <div class="context-axis"></div>
+              <div class="context-nodes" id="contextNodes">
+                <div class="context-node active" data-context="1940s">
+                  <div class="context-dot"></div>
+                  <div class="context-year">1940s</div>
+                </div>
+                <div class="context-node" data-context="1950s">
+                  <div class="context-dot"></div>
+                  <div class="context-year">1950s</div>
+                </div>
+                <div class="context-node" data-context="1960s">
+                  <div class="context-dot"></div>
+                  <div class="context-year">1960s</div>
+                </div>
+                <div class="context-node" data-context="1970s">
+                  <div class="context-dot"></div>
+                  <div class="context-year">1970s</div>
+                </div>
+                <div class="context-node" data-context="1981">
+                  <div class="context-dot"></div>
+                  <div class="context-year">1981</div>
+                </div>
+              </div>
+              <div class="context-caption" id="contextCaption">
+                Early electronic computers appear, showing that logic and arithmetic can be mechanized with circuits and switches.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RHETORIC -->
+      <section class="view" id="view-rhetoric">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>03 · Strategy</span>
+          </div>
+          <h2 class="view-title">How the Essay Persuades</h2>
+          <p class="view-intro">
+            Jastrow’s dominant strategy is compare-and-contrast: he makes brains legible by likening them to computers, then slowly reveals why they are not the same kind of machine.
+          </p>
+          <div class="compare-panels">
+            <div class="compare-panel computer">
+              <h3>Computers</h3>
+              <div class="small">What he emphasizes</div>
+              <ul>
+                <li>Electronic gates built from diodes and transistors.</li>
+                <li>AND / OR logic for arithmetic and business rules.</li>
+                <li>Simple machines: fixed wiring, narrow repertoire.</li>
+                <li>Large machines: programmable, able to “learn” via programs.</li>
+              </ul>
+            </div>
+            <div class="compare-panel brain">
+              <h3>Brains</h3>
+              <div class="small">What he emphasizes</div>
+              <ul>
+                <li>Neurons as gates in networks of nerve fibers.</li>
+                <li>Logical behavior emerging from bioelectric signals.</li>
+                <li>Plastic wiring: connections can change with experience.</li>
+                <li>Massive connectivity and ALMOST logic.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="margin-top:18px;">
+            <div class="card-title">Comparison Strips</div>
+            <div class="card-meta">Click to see how similarity turns into contrast</div>
+            <div class="strip-list" id="stripList">
+              <div class="strip" data-strip="gates">
+                <span class="strip-label">Logical gates</span>
+                <span class="strip-mode">Click for explanation</span>
+              </div>
+              <div class="strip" data-strip="wiring">
+                <span class="strip-label">Fixed vs variable wiring</span>
+                <span class="strip-mode">Click for explanation</span>
+              </div>
+              <div class="strip" data-strip="logic">
+                <span class="strip-label">All-or-nothing vs ALMOST</span>
+                <span class="strip-mode">Click for explanation</span>
+              </div>
+            </div>
+            <div class="strip-detail" id="stripDetail">
+              Jastrow starts by noting that both brains and computers use gates that implement AND and OR, which reassures the reader that logic is a shared foundation.
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title">Why Compare and Contrast Works Here</div>
+            <div class="card-body small">
+              Beginning with similarities builds trust: readers accept that the brain is not magic but a system. Only then does he introduce the differences in wiring, connectivity, and logic style that make human intelligence feel both familiar and extraordinary.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CORE ARGUMENT -->
+      <section class="view" id="view-core">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>04 · Argument</span>
+          </div>
+          <h2 class="view-title">Brains and Computers: The Central Argument</h2>
+          <p class="view-intro">
+            At the core of the essay is a claim: brains and computers share basic logical operations, but differ in wiring, scale, and style of logic in ways that make human intelligence powerful precisely because it is imprecise.
+          </p>
+
+          <div class="logic-layout">
+            <div class="logic-demo">
+              <div class="card-meta" style="margin-bottom:4px;">Interactive gate</div>
+              <div class="logic-inputs">
+                <label><input type="checkbox" id="inA"> a</label>
+                <label><input type="checkbox" id="inB"> b</label>
+                <button class="logic-mode-btn" id="modeBtn">Mode: AND</button>
+              </div>
+              <div class="logic-visual">
+                <div class="logic-wire in-a" id="wireA"></div>
+                <div class="logic-wire in-b" id="wireB"></div>
+                <div class="logic-gate" id="gateLabel">AND</div>
+                <div class="logic-wire out" id="wireOut"></div>
+                <div class="logic-output-label">Output c: <span id="outLabel">0</span></div>
+              </div>
+            </div>
+            <div class="logic-explain">
+              <div class="card-meta">What this gate is doing</div>
+              <p class="small">
+                The AND gate implements the rule “If ‘a’ is true and ‘b’ is true, then ‘c’ is true.” The OR gate implements “If ‘a’ is true or ‘b’ is true, then ‘c’ is true.” Jastrow shows that both arithmetic and everyday decisions can be decomposed into chains of such gates.
+              </p>
+              <div class="logic-tabs">
+                <button class="logic-tab active" data-scenario="arith">Arithmetic</button>
+                <button class="logic-tab" data-scenario="business">Business</button>
+              </div>
+              <div class="logic-scenario" id="logicScenario">
+                Inside a computer, adding 1 + 1 = 2 can be represented as signals on wires labelled “1” and “1” entering a gate, and a signal for “2” leaving when both inputs are active.
+              </div>
+            </div>
+          </div>
+
+          <div class="loop-wrap">
+            <div>
+              <div class="card-meta" style="margin-bottom:4px;">Learning by experience</div>
+              <div class="loop-diagram">
+                <div class="loop-node active" data-step="TRY">1. TRY</div>
+                <div class="loop-node" data-step="COMPARE">2. COMPARE</div>
+                <div class="loop-node" data-step="ADJUST">3. ADJUST</div>
+                <div class="loop-node" data-step="STORE">4. STORE</div>
+              </div>
+              <p class="loop-caption" id="loopCaption">
+                The system attempts an approach to a problem—an action, a calculation, or a decision.
+              </p>
+            </div>
+            <div>
+              <div class="card">
+                <div class="card-title">From Fixed Responses to Learning</div>
+                <div class="card-meta">Frog vs programmable computer vs human</div>
+                <div class="card-body small">
+                  A simple brain, like a frog’s, is wired for a fixed repertoire: snap at dark moving spots, regardless of context. A programmable computer can switch repertoires when a new program is loaded, but its flexibility lives in the programmer. A learning brain goes further: it modifies its own wiring using a loop of trying, comparing results with goals, adjusting strategies, and storing successful patterns.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="connection-layout">
+            <div class="gate-simple">
+              <div class="card-meta" style="margin-bottom:4px;">Computer gate</div>
+              <div class="simple-diagram">
+                <div class="simple-wire w1"></div>
+                <div class="simple-wire w2"></div>
+                <div class="simple-wire w3"></div>
+                <div class="simple-wire w4"></div>
+                <div class="simple-gate">AND</div>
+                <div class="simple-wire out" id="simpleOut"></div>
+              </div>
+              <p class="small">
+                In a computer, a gate typically has only a handful of input wires. For an AND gate, all active inputs must be present or the gate stays closed.
+              </p>
+            </div>
+            <div class="gate-brain">
+              <div class="card-meta" style="margin-bottom:4px;">Brain gate &amp; ALMOST logic</div>
+              <div class="brain-diagram" id="brainDiagram">
+                <div class="brain-gate"></div>
+                <div class="brain-out" id="brainOut"></div>
+              </div>
+              <div class="almost-controls">
+                <div>Current threshold example: <span id="almostExample"></span></div>
+                <button class="almost-btn" id="almostBtn">Change threshold example</button>
+                <div class="small">
+                  A gate in a human brain may receive signals from tens of thousands of other cells. It does not wait for all of them. It fires when enough inputs are active—ALMOST logic instead of strict AND.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONCEPTS -->
+      <section class="view" id="view-concepts">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>05 · Concepts</span>
+          </div>
+          <h2 class="view-title">Key Concepts in the Essay</h2>
+          <p class="view-intro">
+            The essay turns on a small set of technical ideas: AND and OR gates, learning loops, plastic wiring, connectivity, and ALMOST logic. Mastering these concepts lets you follow both the science and the argument.
+          </p>
+          <div class="topic-theme">
+            <div class="topic-list" id="conceptTopics">
+              <div class="small" style="margin-bottom:6px;">Click a concept</div>
+              <div class="topic-item active" data-concept="andor">AND / OR gates</div>
+              <div class="topic-item" data-concept="loop">Learning loop</div>
+              <div class="topic-item" data-concept="plasticity">Plasticity</div>
+              <div class="topic-item" data-concept="connectivity">Connectivity</div>
+              <div class="topic-item" data-concept="almost">ALMOST logic</div>
+            </div>
+            <div class="theme-list">
+              <div class="card-meta" style="margin-bottom:6px;">Concept explanation</div>
+              <div class="theme-text" id="conceptDetail">
+                AND and OR gates are the smallest logical units that let both computers and brains implement reasoning: combining conditions (“a and b”) or alternatives (“a or b”) to reach a conclusion “c.”
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- THEMES -->
+      <section class="view" id="view-themes">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>06 · Theme</span>
+          </div>
+          <h2 class="view-title">Themes: Beyond Brains and Circuits</h2>
+          <p class="view-intro">
+            The topic of the essay is brains and computers. Its themes are deeper: what intelligence is, how it grows from structure and experience, and why imperfection can be a strength.
+          </p>
+          <div class="topic-theme">
+            <div class="topic-list" id="topicThemes">
+              <div class="small" style="margin-bottom:6px;">Click a topic</div>
+              <div class="topic-item active" data-theme="intelligence">Brains &amp; intelligence</div>
+              <div class="topic-item" data-theme="adaptability">Adaptability vs perfection</div>
+              <div class="topic-item" data-theme="evolution">Evolution &amp; survival</div>
+            </div>
+            <div class="theme-list">
+              <div class="card-meta" style="margin-bottom:6px;">Theme statement</div>
+              <div class="theme-text" id="themeDetail">
+                Intelligence, in this essay, is not a mystical spark but the behavior of a system with enough memory, flexible wiring, and feedback to learn from experience.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAKEAWAYS -->
+      <section class="view" id="view-takeaways">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>07 · Takeaways</span>
+          </div>
+          <h2 class="view-title">Exam-Ready Takeaways</h2>
+          <p class="view-intro">
+            Each sentence below is a defensible claim you could use as a thesis in an essay or exam answer. Click a card to see how to support it.
+          </p>
+          <div class="takeaways" id="takeawaysList">
+            <div class="takeaway-card">
+              <div class="takeaway-index">1</div>
+              <div class="takeaway-text">
+                Jastrow argues that both brains and computers rely on the same basic logical gates, but differ radically in scale and flexibility.
+              </div>
+              <div class="takeaway-annotation">
+                Support this with his description of AND/OR gates working in both electronic circuits and neural circuits, then contrast 2–4 wires per computer gate with up to 100,000 per human neuron.
+              </div>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-index">2</div>
+              <div class="takeaway-text">
+                In this essay, intelligence is defined less by raw calculating power and more by the capacity to learn from experience.
+              </div>
+              <div class="takeaway-annotation">
+                Refer to his description of the learning loop—try, compare, adjust, store—and his claim that a brain that can modify its wiring has the “beginnings of intelligence.”
+              </div>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-index">3</div>
+              <div class="takeaway-text">
+                Human brains trade exactness for speed: ALMOST logic lets them act quickly on incomplete information.
+              </div>
+              <div class="takeaway-annotation">
+                Use the example of 50,000 input wires where only about 10,000–15,000 need to be active, contrasted with the paralyzing slowness of a brain that waited for all 50,000.
+              </div>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-index">4</div>
+              <div class="takeaway-text">
+                Plasticity—initially unwired circuits that experience can shape—explains why human behavior is more adaptive than that of simpler animals.
+              </div>
+              <div class="takeaway-annotation">
+                Point to his claim that humans are born with more “blank circuits” than any other animal, and that connections are formed gradually as we learn survival strategies.
+              </div>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-index">5</div>
+              <div class="takeaway-text">
+                By comparing computers to brains, Jastrow makes an unfamiliar biological system feel graspable through familiar technological metaphors.
+              </div>
+              <div class="takeaway-annotation">
+                Show how he starts with computer arithmetic and business rules, then applies the same gate language to neurons to reduce the mystery of mental processes.
+              </div>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-index">6</div>
+              <div class="takeaway-text">
+                The enormous number of connections per neuron underpins the richness and subtlety of human thought.
+              </div>
+              <div class="takeaway-annotation">
+                Cite his description of every human brain gate being connected to tens of thousands of others, so each decision is a “complicated assessment” of many inputs.
+              </div>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-index">7</div>
+              <div class="takeaway-text">
+                In evolutionary terms, a fast, occasionally wrong brain is more valuable than a slow, perfectly accurate one.
+              </div>
+              <div class="takeaway-annotation">
+                Use his argument that a brain waiting for perfect assurance before acting would seldom reach decisions and would fail to pass its genes on.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- IMPLICATIONS -->
+      <section class="view" id="view-implications">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>08 · Implications</span>
+          </div>
+          <h2 class="view-title">What Follows from the Argument</h2>
+          <p class="view-intro">
+            The essay’s logic reaches beyond its own pages, raising questions about human intelligence, artificial intelligence, and the kinds of minds evolution tends to favor.
+          </p>
+          <div class="implications-grid">
+            <div class="imp-card">
+              <div class="imp-title">Human intelligence</div>
+              <div class="imp-body">
+                Human intelligence looks less like perfect logical deduction and more like fast pattern recognition in a noisy, high-dimensional space. The brain’s wiring and ALMOST logic explain why intuition and “gut feelings” can be both unreliable and remarkably effective.
+              </div>
+            </div>
+            <div class="imp-card">
+              <div class="imp-title">Artificial intelligence</div>
+              <div class="imp-body">
+                If computers are to approach human-like thinking, they may need to move away from rigid, all-or-nothing logic and embrace approximate, threshold-based processes and self-modifying connections—closer to how large neural networks learn.
+              </div>
+            </div>
+            <div class="imp-card">
+              <div class="imp-title">Evolution &amp; survival</div>
+              <div class="imp-body">
+                Evolution rewards organisms that act in time, not those that wait for certainty. The essay suggests that cognitive systems that survive are those that balance enough accuracy with sufficient speed, rather than chasing impossible perfection.
+              </div>
+            </div>
+          </div>
+
+          <div class="closing-block">
+            <h3>After the calculations</h3>
+            <p>A computer waits until every bit is in its place.</p>
+            <p>A brain moves when just enough of its signals agree.</p>
+            <p style="margin-top:12px;">Both follow rules. Only one had to learn them by not dying.</p>
+            <p style="margin-top:12px;"><em>If our intelligence depends on acting before we are sure, what happens when we build machines that refuse to move without certainty?</em></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="view" id="view-quiz">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>09 · Assessment</span>
+          </div>
+          <h2 class="view-title">Quiz, Reasoning, and Misconceptions</h2>
+          <p class="view-intro">
+            Use these questions to test your understanding of Jastrow’s logic, his distinctions between brains and computers, and the implications of ALMOST logic.
+          </p>
+          <div class="quiz-list" id="quizList">
+            <div class="quiz-item" data-correct="1">
+              <div class="quiz-question">Which situation best illustrates an AND gate as Jastrow uses the term?</div>
+              <ul class="quiz-options">
+                <li data-index="0">Order more stock if sales are heavy or inventory is high.</li>
+                <li data-index="1">Order more stock only when inventory is depleted and sales are heavy.</li>
+                <li data-index="2">Cut prices when competitors are cheaper.</li>
+                <li data-index="3">Increase advertising whenever sales are low.</li>
+              </ul>
+              <div class="quiz-feedback"></div>
+            </div>
+            <div class="quiz-item" data-correct="1">
+              <div class="quiz-question">The frog that always snaps at dark moving spots illustrates:</div>
+              <ul class="quiz-options">
+                <li data-index="0">A brain with a large memory but no learning.</li>
+                <li data-index="1">A system with fixed wiring and a narrow repertoire.</li>
+                <li data-index="2">ALMOST logic in action.</li>
+                <li data-index="3">A highly plastic and programmable brain.</li>
+              </ul>
+              <div class="quiz-feedback"></div>
+            </div>
+            <div class="quiz-item" data-correct="1">
+              <div class="quiz-question">Which rule best captures ALMOST logic in Jastrow’s description?</div>
+              <ul class="quiz-options">
+                <li data-index="0">The gate fires only when all 50,000 inputs are active.</li>
+                <li data-index="1">The gate fires when roughly 10,000–15,000 of 50,000 inputs are active.</li>
+                <li data-index="2">The gate fires randomly, regardless of input.</li>
+                <li data-index="3">The gate fires only in the absence of any uncertainty.</li>
+              </ul>
+              <div class="quiz-feedback"></div>
+            </div>
+          </div>
+
+          <div class="misconceptions">
+            <div class="card-meta">Common misconceptions</div>
+            <ul class="miscon-list" id="misconList">
+              <li class="miscon-item" data-mis="same">“Brains are just wet computers.”</li>
+              <li class="miscon-item" data-mis="accuracy">“More accuracy is always better in thinking.”</li>
+              <li class="miscon-item" data-mis="program">“In a learning brain, the program comes from outside.”</li>
+            </ul>
+            <div class="miscon-detail" id="misconDetail">
+              Click a statement to see why it is misleading or incomplete in light of the essay.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARGUMENT FLOW -->
+      <section class="view" id="view-concept-flow">
+        <div class="view-inner">
+          <div class="pill-label">
+            <span class="pill-dot"></span><span>Argument Flow</span>
+          </div>
+          <h2 class="view-title">Concept Map of the Argument</h2>
+          <p class="view-intro">
+            Follow the argument as it moves from shared logic through learning and connectivity to ALMOST logic and evolutionary payoff.
+          </p>
+          <div class="card">
+            <div class="card-body small">
+              <ol style="padding-left: 18px; line-height:1.7;">
+                <li>Start with <strong>shared logic</strong>: both brains and computers use AND/OR gates.</li>
+                <li>Introduce <strong>learning</strong>: large memory and changeable wiring allow systems to learn from experience.</li>
+                <li>Highlight <strong>connectivity</strong>: human brain gates receive inputs from up to 100,000 other cells.</li>
+                <li>Explain <strong>ALMOST logic</strong>: brain gates fire when enough inputs are active, not all.</li>
+                <li>Draw the <strong>evolutionary conclusion</strong>: such imprecise but fast brains are favored for survival.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const views = {
+      home: document.getElementById("view-home"),
+      author: document.getElementById("view-author"),
+      context: document.getElementById("view-context"),
+      rhetoric: document.getElementById("view-rhetoric"),
+      core: document.getElementById("view-core"),
+      concepts: document.getElementById("view-concepts"),
+      themes: document.getElementById("view-themes"),
+      takeaways: document.getElementById("view-takeaways"),
+      implications: document.getElementById("view-implications"),
+      quiz: document.getElementById("view-quiz"),
+      "concept-flow": document.getElementById("view-concept-flow"),
+    };
+
+    function showView(name) {
+      Object.keys(views).forEach((key) => {
+        if (!views[key]) return;
+        if (key === name) {
+          views[key].classList.add("view--active");
+        } else {
+          views[key].classList.remove("view--active");
+        }
+      });
+    }
+
+    document.querySelectorAll("[data-nav]").forEach((el) => {
+      el.addEventListener("click", () => {
+        const target = el.getAttribute("data-nav");
+        showView(target === "home" ? "home" : "concept-flow");
+      });
+    });
+
+    document.querySelectorAll(".map-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const target = card.getAttribute("data-view-target");
+        if (views[target]) {
+          showView(target);
+        }
+      });
+    });
+
+    const contextCaption = document.getElementById("contextCaption");
+    const contextTexts = {
+      "1940s": "Early electronic computers appear, showing that logic and arithmetic can be mechanized with circuits and switches.",
+      "1950s": "Nuclear research and space programs rely on computers, linking scientific prediction with digital calculation.",
+      "1960s": "Apollo and satellite projects push computing power forward, normalizing the idea of machines that ‘think’ in limited domains.",
+      "1970s": "Cognitive science and early AI explore brains and minds as information-processing systems.",
+      "1981": "The Enchanted Loom is published, using computer metaphors to explain how biological brains might work.",
+    };
+
+    document.querySelectorAll("#contextNodes .context-node").forEach((node) => {
+      node.addEventListener("click", () => {
+        document.querySelectorAll("#contextNodes .context-node").forEach((n) =>
+          n.classList.remove("active")
+        );
+        node.classList.add("active");
+        const key = node.getAttribute("data-context");
+        contextCaption.textContent = contextTexts[key];
+      });
+    });
+
+    const stripDetail = document.getElementById("stripDetail");
+    const stripTexts = {
+      gates:
+        "He begins with a similarity: both brains and computers use AND/OR gates. This makes the brain feel less mysterious and builds trust before he introduces differences.",
+      wiring:
+        "He contrasts simple, permanently wired systems (like a frog’s reflexes or a basic computer) with complex, rewireable ones. This sets up intelligence as a property of flexible wiring.",
+      logic:
+        "He finally distinguishes computer logic—every condition must be satisfied—from human ALMOST logic, where enough evidence is sufficient. This contrast supports his claim about imprecise but powerful thought.",
+    };
+
+    document.querySelectorAll("#stripList .strip").forEach((strip) => {
+      strip.addEventListener("click", () => {
+        const key = strip.getAttribute("data-strip");
+        stripDetail.textContent = stripTexts[key];
+      });
+    });
+
+    let gateMode = "AND";
+    const inA = document.getElementById("inA");
+    const inB = document.getElementById("inB");
+    const modeBtn = document.getElementById("modeBtn");
+    const outLabel = document.getElementById("outLabel");
+    const gateLabel = document.getElementById("gateLabel");
+    const wireOut = document.getElementById("wireOut");
+    const wireA = document.getElementById("wireA");
+    const wireB = document.getElementById("wireB");
+    const logicScenario = document.getElementById("logicScenario");
+
+    function updateGate() {
+      const a = inA.checked ? 1 : 0;
+      const b = inB.checked ? 1 : 0;
+      wireA.style.background = a ? "#2563eb" : "#d1d5db";
+      wireB.style.background = b ? "#2563eb" : "#d1d5db";
+      const out = gateMode === "AND" ? (a && b) : (a || b);
+      outLabel.textContent = out ? "1" : "0";
+      if (out) {
+        wireOut.style.background = gateMode === "AND" ? "#2563eb" : "#16a34a";
+        wireOut.style.boxShadow =
+          gateMode === "AND"
+            ? "0 0 12px rgba(37,99,235,0.6)"
+            : "0 0 12px rgba(22,163,74,0.6)";
+      } else {
+        wireOut.style.background = "#d1d5db";
+        wireOut.style.boxShadow = "none";
+      }
+    }
+
+    modeBtn.addEventListener("click", () => {
+      gateMode = gateMode === "AND" ? "OR" : "AND";
+      modeBtn.textContent = `Mode: ${gateMode}`;
+      gateLabel.textContent = gateMode;
+      updateGate();
+    });
+
+    [inA, inB].forEach((el) => el.addEventListener("change", updateGate));
+    updateGate();
+
+    const scenarioTexts = {
+      arith:
+        "Inside a computer, adding 1 + 1 = 2 can be represented as signals on wires labelled “1” and “1” entering a gate, and a signal for “2” leaving when both inputs are active.",
+      business:
+        "In his business example, a gate opens to “Order more goods!” only when two conditions are met at once: stock is depleted and sales are heavy.",
+    };
+
+    document.querySelectorAll(".logic-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".logic-tab").forEach((t) =>
+          t.classList.remove("active")
+        );
+        tab.classList.add("active");
+        const key = tab.getAttribute("data-scenario");
+        logicScenario.textContent = scenarioTexts[key];
+      });
+    });
+
+    const loopNodes = Array.from(document.querySelectorAll(".loop-node"));
+    const loopCaption = document.getElementById("loopCaption");
+    const loopTexts = {
+      TRY: "The system attempts an approach to a problem—an action, a calculation, or a decision.",
+      COMPARE:
+        "It compares the actual result with its goal, detecting success, failure, or deviation.",
+      ADJUST:
+        "If it fails, it searches for the source of error and adjusts the relevant part of its reasoning or program.",
+      STORE:
+        "When it succeeds, it stores the method in memory so that next time it can reuse and refine the successful strategy.",
+    };
+    let loopIndex = 0;
+    let loopTimer;
+
+    function showLoopStep(index) {
+      loopNodes.forEach((n) => n.classList.remove("active"));
+      const node = loopNodes[index];
+      if (!node) return;
+      node.classList.add("active");
+      const step = node.getAttribute("data-step");
+      loopCaption.textContent = loopTexts[step];
+    }
+
+    function advanceLoop() {
+      loopIndex = (loopIndex + 1) % loopNodes.length;
+      showLoopStep(loopIndex);
+    }
+
+    function startLoopTimer() {
+      if (loopTimer) clearInterval(loopTimer);
+      loopTimer = setInterval(advanceLoop, 4000);
+    }
+
+    loopNodes.forEach((node, idx) => {
+      node.addEventListener("click", () => {
+        loopIndex = idx;
+        showLoopStep(loopIndex);
+        startLoopTimer();
+      });
+    });
+
+    showLoopStep(0);
+    startLoopTimer();
+
+    const simpleOut = document.getElementById("simpleOut");
+    simpleOut.style.background = "#d1d5db";
+
+    const brainDiagram = document.getElementById("brainDiagram");
+    const brainOut = document.getElementById("brainOut");
+    const almostExample = document.getElementById("almostExample");
+    const almostBtn = document.getElementById("almostBtn");
+
+    const TOTAL_LINES = 30;
+    for (let i = 0; i < TOTAL_LINES; i++) {
+      const line = document.createElement("div");
+      line.className = "brain-line";
+      const y = 10 + Math.random() * 80;
+      const angle = Math.random() * 40 - 20;
+      line.style.top = y + "px";
+      line.style.left = "0";
+      line.style.transform = `rotate(${angle}deg)`;
+      brainDiagram.appendChild(line);
+    }
+    const brainLines = Array.from(
+      brainDiagram.querySelectorAll(".brain-line")
+    );
+
+    const examples = [
+      { text: "About 15,000 of 50,000 inputs is enough for the gate to fire.", threshold: 0.3 },
+      { text: "Even 10,000 of 50,000 inputs may be enough in some situations.", threshold: 0.2 },
+      { text: "A higher bar: roughly 25,000 of 50,000 inputs push the gate to act.", threshold: 0.5 },
+    ];
+    let almostState = 0;
+
+    function applyExample() {
+      const ex = examples[almostState];
+      almostExample.textContent = ex.text;
+      const limit = Math.floor(TOTAL_LINES * ex.threshold);
+      brainLines.forEach((line, idx) => {
+        if (idx < limit) {
+          line.style.background = "rgba(22,163,74,0.9)";
+          line.style.opacity = 0.95;
+        } else {
+          line.style.background = "rgba(148,163,184,0.6)";
+          line.style.opacity = 0.4;
+        }
+      });
+      brainOut.style.background = "#16a34a";
+      brainOut.style.boxShadow = "0 0 12px rgba(22,163,74,0.6)";
+    }
+
+    almostBtn.addEventListener("click", () => {
+      almostState = (almostState + 1) % examples.length;
+      applyExample();
+    });
+    applyExample();
+
+    const conceptDetail = document.getElementById("conceptDetail");
+    const conceptTexts = {
+      andor:
+        "AND and OR gates are the smallest logical units that let both computers and brains implement reasoning: combining conditions (“a and b”) or alternatives (“a or b”) to reach a conclusion “c.”",
+      loop:
+        "The learning loop is a four-step process: the system tries an approach, compares the outcome with its goal, adjusts its method in light of errors, and stores successful strategies for future use.",
+      plasticity:
+        "Plasticity refers to the fact that many brain circuits start unwired and are connected by experience, allowing behavior to be shaped by life rather than fixed at birth.",
+      connectivity:
+        "Connectivity is the number of inputs each neuron receives. Jastrow highlights that a human brain gate can have up to 100,000 incoming fibers, making each decision the result of many influences.",
+      almost:
+        "ALMOST logic means a gate fires when enough inputs are active, not when every single one is. This makes human thought fast and flexible, at the cost of occasional errors.",
+    };
+
+    document.querySelectorAll("#conceptTopics .topic-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        document
+          .querySelectorAll("#conceptTopics .topic-item")
+          .forEach((t) => t.classList.remove("active"));
+        item.classList.add("active");
+        const key = item.getAttribute("data-concept");
+        conceptDetail.textContent = conceptTexts[key];
+      });
+    });
+
+    const themeDetail = document.getElementById("themeDetail");
+    const themeTexts = {
+      intelligence:
+        "Intelligence, in this essay, is not a mystical spark but the behavior of a system with enough memory, flexible wiring, and feedback to learn from experience.",
+      adaptability:
+        "A central theme is that adaptability matters more than perfection: a brain that can act on partial information outperforms one that waits for complete certainty.",
+      evolution:
+        "Jastrow frames thinking as an evolutionary trade-off: organisms with fast, good-enough decision systems survive and reproduce; those that demand exactness may not act in time.",
+    };
+
+    document.querySelectorAll("#topicThemes .topic-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        document
+          .querySelectorAll("#topicThemes .topic-item")
+          .forEach((t) => t.classList.remove("active"));
+        item.classList.add("active");
+        const key = item.getAttribute("data-theme");
+        themeDetail.textContent = themeTexts[key];
+      });
+    });
+
+    document.querySelectorAll("#takeawaysList .takeaway-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        card.classList.toggle("show-annotation");
+      });
+    });
+
+    document.querySelectorAll("#quizList .quiz-item").forEach((item) => {
+      const correctIndex = parseInt(item.getAttribute("data-correct"), 10);
+      const options = item.querySelectorAll(".quiz-options li");
+      const feedback = item.querySelector(".quiz-feedback");
+      options.forEach((opt) => {
+        opt.addEventListener("click", () => {
+          options.forEach((o) => {
+            o.classList.remove("correct", "incorrect");
+          });
+          const idx = parseInt(opt.getAttribute("data-index"), 10);
+          if (idx === correctIndex) {
+            opt.classList.add("correct");
+            feedback.textContent = "Correct: this matches Jastrow’s example in the essay.";
+          } else {
+            opt.classList.add("incorrect");
+            feedback.textContent = "Not quite—compare this option with the specific examples he uses.";
+          }
+        });
+      });
+    });
+
+    const misconDetail = document.getElementById("misconDetail");
+    const misconTexts = {
+      same:
+        "Jastrow explicitly rejects the idea that brains are “just computers.” They share logical steps, but brains differ in plastic wiring, massive connectivity, and ALMOST logic, which make their behavior richer and more adaptive.",
+      accuracy:
+        "He argues that a brain waiting for perfect accuracy would be too slow to survive. Evolution favors systems that act quickly on partial evidence, even at the cost of some mistakes.",
+      program:
+        "While computers depend on external programmers to load new programs, a learning brain rewires its own circuits in response to experience. In that sense, the “program” emerges from the organism’s history, not from an outside designer.",
+    };
+
+    document.querySelectorAll("#misconList .miscon-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        const key = item.getAttribute("data-mis");
+        misconDetail.textContent = misconTexts[key];
+      });
+    });
+
+    // Fullscreen toggle
+    const fsButton = document.getElementById("fsToggle");
+    const shell = document.querySelector(".shell");
+
+    function isFullscreen() {
+      return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    }
+
+    function enterFullscreen() {
+      if (shell.requestFullscreen) {
+        shell.requestFullscreen();
+      } else if (shell.webkitRequestFullscreen) {
+        shell.webkitRequestFullscreen();
+      } else if (shell.msRequestFullscreen) {
+        shell.msRequestFullscreen();
+      }
+    }
+
+    function exitFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
+
+    fsButton.addEventListener("click", () => {
+      if (!isFullscreen()) {
+        enterFullscreen();
+      } else {
+        exitFullscreen();
+      }
+    });
+
+    document.addEventListener("fullscreenchange", () => {
+      if (isFullscreen()) {
+        fsButton.classList.add("fs-active");
+        fsButton.textContent = "⤡";
+      } else {
+        fsButton.classList.remove("fs-active");
+        fsButton.textContent = "⤢";
+      }
+    });
+  </script>
+</body>
+</html>
