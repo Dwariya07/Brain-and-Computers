@@ -1057,6 +1057,34 @@
         grid-template-columns: minmax(0, 1fr);
       }
     }
+
+    /* Biology media row */
+    .bio-media-row {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .bio-media-block img,
+    .bio-media-block video {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+      display: block;
+    }
+
+    .bio-media-block video {
+      background: #000;
+    }
+
+    .bio-media-caption {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
@@ -1486,20 +1514,28 @@
             </div>
             <div>
               <div class="card">
-                <div class="card-title">Click to link biology and logic</div>
-                <div class="card-meta">Choose which layer of the brain you want to relate to his argument</div>
-                <div class="topic-theme">
-                  <div class="topic-list" id="bioLinksTopics">
-                    <div class="topic-item active" data-bio="neuron">Single neuron</div>
-                    <div class="topic-item" data-bio="plasticity">Neuroplasticity</div>
-                    <div class="topic-item" data-bio="cortex">Cerebral cortex</div>
-                  </div>
-                  <div class="theme-list">
-                    <div class="card-meta" style="margin-bottom:6px;">How it supports Jastrow’s ideas</div>
-                    <div class="theme-text" id="bioLinksDetail">
-                      At the level of a single neuron, thousands of synapses converge on one cell. Jastrow’s image of 50,000 inputs but only 10,000–15,000 needed to fire is a conceptual model of how a neuron can implement ALMOST logic.
-                    </div>
-                  </div>
+                <div class="card-meta" style="margin-bottom:4px;">Neuroplasticity visual</div>
+                <img src="Neurop.jpg" alt="Neuroplasticity illustration" style="width:100%; border-radius:12px; display:block;">
+                <div class="small" style="margin-top:6px;">
+                  This image sits beside the neuroplasticity explanation, reinforcing how experience reshapes neural connections.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:24px;">
+            <div class="card-title">Click to link biology and logic</div>
+            <div class="card-meta">Choose which layer of the brain you want to relate to his argument</div>
+            <div class="topic-theme">
+              <div class="topic-list" id="bioLinksTopics">
+                <div class="topic-item active" data-bio="neuron">Single neuron</div>
+                <div class="topic-item" data-bio="plasticity">Neuroplasticity</div>
+                <div class="topic-item" data-bio="cortex">Cerebral cortex</div>
+              </div>
+              <div class="theme-list">
+                <div class="card-meta" style="margin-bottom:6px;">How it supports Jastrow’s ideas</div>
+                <div class="theme-text" id="bioLinksDetail">
+                  At the level of a single neuron, thousands of synapses converge on one cell. Jastrow’s image of 50,000 inputs but only 10,000–15,000 needed to fire is a conceptual model of how a neuron can implement ALMOST logic.
                 </div>
               </div>
             </div>
@@ -1522,6 +1558,21 @@
               <div class="imp-title">Why humans are “special”</div>
               <div class="imp-body">
                 A large, plastic cortex packed with neurons provides many blank circuits at birth. Experience wires these circuits into specialized programs, making human intelligence emerge from structure plus learning rather than from hard‑coded reflexes.
+              </div>
+            </div>
+          </div>
+
+          <div class="bio-media-row">
+            <div class="bio-media-block">
+              <img src="Neuron_firing.jpg" alt="Neuron firing pattern">
+              <div class="bio-media-caption">
+                Still image of a neuron firing, echoing the fan‑in and threshold ideas above.
+              </div>
+            </div>
+            <div class="bio-media-block">
+              <video src="neuron.mp4" controls preload="metadata"></video>
+              <div class="bio-media-caption">
+                Short neuron video: use it when presenting to give a dynamic sense of signalling and plastic change.
               </div>
             </div>
           </div>
@@ -1716,7 +1767,6 @@
               <div class="quiz-feedback"></div>
             </div>
           </div>
-
           <div class="misconceptions">
             <div class="card-meta">Common misconceptions</div>
             <ul class="miscon-list" id="misconList">
@@ -1758,7 +1808,6 @@
   </div>
 
   <script>
-    
     const views = {
       home: document.getElementById("view-home"),
       author: document.getElementById("view-author"),
@@ -1770,7 +1819,6 @@
       themes: document.getElementById("view-themes"),
       takeaways: document.getElementById("view-takeaways"),
       implications: document.getElementById("view-implications"),
-      quiz: document.getElementById("view-quiz"),
       "concept-flow": document.getElementById("view-concept-flow"),
     };
 
@@ -1937,10 +1985,9 @@
       });
     });
 
-        showLoopStep(0);
+    showLoopStep(0);
     startLoopTimer();
 
-    // Concepts topic list
     const conceptDetail = document.getElementById("conceptDetail");
     const conceptTexts = {
       andor:
@@ -1968,7 +2015,6 @@
         });
       });
 
-    // Biology neuron fan-in slider
     const bioBrainDiagram = document.getElementById("bioBrainDiagram");
     const bioBrainOut = document.getElementById("bioBrainOut");
     const bioSynSlider = document.getElementById("bioSynSlider");
@@ -1991,7 +2037,7 @@
       );
 
       function updateBioLines() {
-        const value = parseInt(bioSynSlider.value, 10); // 0–100
+        const value = parseInt(bioSynSlider.value, 10);
         bioSynCount.textContent = `${value}% of local synapses active`;
         const threshold = 30;
         const activeCount = Math.floor((value / 100) * BIO_LINES);
@@ -2017,93 +2063,85 @@
       updateBioLines();
     }
 
- // Brain gate & ALMOST logic (random active lines each click)
-const brainDiagram = document.getElementById("brainDiagram");
-const brainOut = document.getElementById("brainOut");
-const almostBtn = document.getElementById("almostBtn");
-const almostExample = document.getElementById("almostExample");
+    const brainDiagram = document.getElementById("brainDiagram");
+    const brainOut = document.getElementById("brainOut");
+    const almostBtn = document.getElementById("almostBtn");
+    const almostExample = document.getElementById("almostExample");
 
-if (brainDiagram && almostBtn && almostExample && brainOut) {
-  const LINES = 24;
+    if (brainDiagram && almostBtn && almostExample && brainOut) {
+      const LINES = 24;
 
-  // draw input lines once
-  for (let i = 0; i < LINES; i++) {
-    const line = document.createElement("div");
-    line.className = "brain-line";
-    const y = 10 + Math.random() * 80;
-    const angle = Math.random() * 40 - 20;
-    line.style.top = y + "px";
-    line.style.left = "0";
-    line.style.transform = `rotate(${angle}deg)`;
-    brainDiagram.appendChild(line);
-  }
-
-  const brainLines = Array.from(brainDiagram.querySelectorAll(".brain-line"));
-
-  const examples = [
-    "Out of 50,000 inputs, about 10,000 are enough to trigger a response.",
-    "The brain does not wait for every input; it moves when enough evidence is present.",
-    "This ALMOST rule trades perfect accuracy for speed, which helps survival."
-  ];
-  let exIndex = 0;
-
-  function highlightRandomLines() {
-    // pick a random threshold between 30% and 70% of inputs
-    const minFrac = 0.3;
-    const maxFrac = 0.7;
-    const frac = minFrac + Math.random() * (maxFrac - minFrac);
-    const activeCount = Math.max(1, Math.floor(frac * brainLines.length));
-
-    // randomly choose which indices are active
-    const indices = [...brainLines.keys()];
-    for (let i = indices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]];
-    }
-    const activeSet = new Set(indices.slice(0, activeCount));
-
-    brainLines.forEach((line, idx) => {
-      if (activeSet.has(idx)) {
-        line.style.background = "rgba(22,163,74,0.9)";
-        line.style.opacity = 0.95;
-      } else {
-        line.style.background = "rgba(148,163,184,0.6)";
-        line.style.opacity = 0.4;
+      for (let i = 0; i < LINES; i++) {
+        const line = document.createElement("div");
+        line.className = "brain-line";
+        const y = 10 + Math.random() * 80;
+        const angle = Math.random() * 40 - 20;
+        line.style.top = y + "px";
+        line.style.left = "0";
+        line.style.transform = `rotate(${angle}deg)`;
+        brainDiagram.appendChild(line);
       }
-    });
 
-    // output fires whenever at least the minimum fraction is active
-    brainOut.style.background = "#16a34a";
-    brainOut.style.boxShadow = "0 0 12px rgba(22,163,74,0.6)";
-  }
+      const brainLines = Array.from(
+        brainDiagram.querySelectorAll(".brain-line")
+      );
 
-  function updateExample() {
-    almostExample.textContent = examples[exIndex];
-    exIndex = (exIndex + 1) % examples.length;
-  }
+      const examples = [
+        "Out of 50,000 inputs, about 10,000 are enough to trigger a response.",
+        "The brain does not wait for every input; it moves when enough evidence is present.",
+        "This ALMOST rule trades perfect accuracy for speed, which helps survival."
+      ];
+      let exIndex = 0;
 
-  almostBtn.addEventListener("click", () => {
-    highlightRandomLines();  // new random pattern
-    updateExample();         // next explanation sentence
-  });
+      function highlightRandomLines() {
+        const minFrac = 0.3;
+        const maxFrac = 0.7;
+        const frac = minFrac + Math.random() * (maxFrac - minFrac);
+        const activeCount = Math.max(1, Math.floor(frac * brainLines.length));
 
-  // initial state
-  highlightRandomLines();
-  updateExample();
-}
+        const indices = [...brainLines.keys()];
+        for (let i = indices.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        const activeSet = new Set(indices.slice(0, activeCount));
 
+        brainLines.forEach((line, idx) => {
+          if (activeSet.has(idx)) {
+            line.style.background = "rgba(22,163,74,0.9)";
+            line.style.opacity = 0.95;
+          } else {
+            line.style.background = "rgba(148,163,184,0.6)";
+            line.style.opacity = 0.4;
+          }
+        });
 
+        brainOut.style.background = "#16a34a";
+        brainOut.style.boxShadow = "0 0 12px rgba(22,163,74,0.6)";
+      }
 
+      function updateExample() {
+        almostExample.textContent = examples[exIndex];
+        exIndex = (exIndex + 1) % examples.length;
+      }
 
-    // Biology ↔ Jastrow links
+      almostBtn.addEventListener("click", () => {
+        highlightRandomLines();
+        updateExample();
+      });
+
+      highlightRandomLines();
+      updateExample();
+    }
+
     const bioLinksDetail = document.getElementById("bioLinksDetail");
     const bioLinksTexts = {
       neuron:
         "At the level of a single neuron, thousands of synapses converge on one cell. Jastrow’s image of 50,000 inputs but only 10,000–15,000 needed to fire is a conceptual model of how a neuron can implement ALMOST logic.",
       plasticity:
-        "Neuroplasticity provides the physical basis for his learning loop. When the brain tries, compares, adjusts, and stores, the changes are adjustments in synaptic strength and wiring patterns.",
+        "Neuroplasticity shows how the brain’s wiring can be reshaped by experience. This gives a physical basis for the learning loop: every successful adjustment leaves a trace in changed connections.",
       cortex:
-        "The human cerebral cortex, with about 16 billion neurons, is where long-term learning and abstract reasoning are concentrated. Its dense, plastic networks allow many ALMOST-style decisions to interact, producing the rich intelligence he describes.",
+        "The cerebral cortex, with billions of neurons in layered circuits, is where ALMOST logic and plasticity scale up into language, planning, and abstract thought—exactly the capacities Jastrow treats as signs of higher intelligence."
     };
 
     document
@@ -2119,67 +2157,40 @@ if (brainDiagram && almostBtn && almostExample && brainOut) {
         });
       });
 
-    // Theme topics
-    const themeDetail = document.getElementById("themeDetail");
-    const themeTexts = {
-      intelligence:
-        "Intelligence, in this essay, is not a mystical spark but the behavior of a system with enough memory, flexible wiring, and feedback to learn from experience.",
-      adaptability:
-        "Jastrow suggests that being adaptable—able to act quickly on partial information—is often more valuable than being perfectly accurate but slow.",
-      evolution:
-        "Evolution favors organisms whose brains make fast, reasonable bets rather than waiting for certainty. ALMOST logic is one way biology implements those bets.",
-    };
-
-    document
-      .querySelectorAll("#topicThemes .topic-item")
-      .forEach((item) => {
-        item.addEventListener("click", () => {
-          document
-            .querySelectorAll("#topicThemes .topic-item")
-            .forEach((t) => t.classList.remove("active"));
-          item.classList.add("active");
-          const key = item.getAttribute("data-theme");
-          themeDetail.textContent = themeTexts[key];
-        });
-      });
-
-    // Takeaway cards
     document.querySelectorAll("#takeawaysList .takeaway-card").forEach((card) => {
       card.addEventListener("click", () => {
         card.classList.toggle("show-annotation");
       });
     });
 
-    // Quiz
     document.querySelectorAll("#quizList .quiz-item").forEach((item) => {
       const correctIndex = parseInt(item.getAttribute("data-correct"), 10);
       const options = item.querySelectorAll(".quiz-options li");
       const feedback = item.querySelector(".quiz-feedback");
-      options.forEach((opt) => {
+      options.forEach((opt, idx) => {
         opt.addEventListener("click", () => {
           options.forEach((o) => o.classList.remove("correct", "incorrect"));
-          const idx = parseInt(opt.getAttribute("data-index"), 10);
           if (idx === correctIndex) {
             opt.classList.add("correct");
-            feedback.textContent = "Correct: this matches Jastrow’s explanation.";
+            feedback.textContent =
+              "Correct: this matches Jastrow’s use of the idea.";
           } else {
             opt.classList.add("incorrect");
             feedback.textContent =
-              "Not quite. Think about how Jastrow defines that concept in the essay.";
+              "Not quite: compare this option with how he actually uses the term.";
           }
         });
       });
     });
 
-    // Misconceptions
     const misconDetail = document.getElementById("misconDetail");
     const misconTexts = {
       same:
-        "Jastrow insists brains are not just wet computers: they share logic, but brains are massively more connected, plastic, and use ALMOST rather than strict logic.",
+        "Jastrow insists that brains and computers share logic but not wiring or behavior. Calling a brain “just a wet computer” ignores plasticity, connectivity, and ALMOST logic.",
       accuracy:
-        "He argues that a brain waiting for perfect accuracy would rarely act and would lose in evolution. Speed on partial information can be more adaptive.",
+        "For Jastrow, a perfectly accurate but slow thinker would lose the evolutionary race. Brains that act quickly on partial information are more likely to survive and reproduce.",
       program:
-        "In a learning brain, the ‘program’ is not fixed from outside; experience rewires connections from within, which is what makes human intelligence open‑ended.",
+        "A learning brain does not wait for an external programmer. Its “program” is rewritten internally through the learning loop and neuroplastic changes in synapses."
     };
 
     document.querySelectorAll("#misconList .miscon-item").forEach((item) => {
@@ -2189,23 +2200,18 @@ if (brainDiagram && almostBtn && almostExample && brainOut) {
       });
     });
 
-    // Fullscreen toggle
     const fsBtn = document.getElementById("fsToggle");
-    if (fsBtn) {
-      fsBtn.addEventListener("click", async () => {
-        if (!document.fullscreenElement) {
-          await document.documentElement.requestFullscreen();
-          fsBtn.classList.add("fs-active");
-        } else {
-          await document.exitFullscreen();
-          fsBtn.classList.remove("fs-active");
-        }
-      });
-    }
-
-    // Start on home view
-    showView("home");
+    fsBtn.addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen?.();
+        fsBtn.classList.add("fs-active");
+      } else {
+        document.exitFullscreen?.();
+        fsBtn.classList.remove("fs-active");
+      }
+    });
   </script>
 </body>
 </html>
+
 
